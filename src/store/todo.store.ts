@@ -1,18 +1,19 @@
-import {makeAutoObservable} from "mobx";
+import {action, computed, makeAutoObservable, observable} from "mobx";
 import {ITodoItem} from "../models";
 
 class Todo {
     constructor() {
-        makeAutoObservable(this);
-        // эта функция автоматом делает такие настройки: вручную их можно задать в makeObservable
-        // makeAutoObservable(
-        //     this,
-        //     {
-        //         todoList: observable, // указываем, что за изменения этого поля нужно следить
-        //         addTodo: action, // указали, что функцию является экшеном
-        //         computed // что-то про вычисляемые значения (почененные как get)
-        //     }
-        // );
+        makeAutoObservable(
+            this,
+            {
+                todoList: observable, // указываем, что за изменения этого поля нужно следить
+                addTodo: action.bound, // указали, что функцию является экшеном
+                removeTodo: action.bound,
+                changeTodoCompleted: action.bound,
+                fetchTodos: action.bound,
+                getTotalTodo: computed // что-то про вычисляемые значения (почененные как get)
+            }
+        );
     }
 
     todoList: ITodoItem[] = [];
@@ -45,10 +46,7 @@ class Todo {
         fetch('https://jsonplaceholder.typicode.com/todos')
             .then(response => response.json())
             .then(json => {
-                console.log('вызвали фетч');
-                console.log('list',this.todoList)
                 const newTodoList = json.slice(0, 20);
-                // this.todoList = [...this.todoList, ...newTodoList]
                 this.todoList = newTodoList
             })
     }

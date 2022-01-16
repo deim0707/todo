@@ -4,24 +4,19 @@ import todoStore from "../store/todo.store";
 import {TodoList} from "../components/Todo/TodoList";
 
 const TodoContainer = observer(() => {
-    const {todoList, fetchTodos, removeTodo, getTotalTodo, changeTodoCompleted} = todoStore;
-
-    const fetch123 = () => todoStore.fetchTodos();
-
-    const data = {
-        todoList,
-        totalCount: getTotalTodo
-    }
-
-    const actions = {
-        fetchTodoList: todoStore.fetchTodos,
-        removeItem: removeTodo,
-        changeTodoCompleted,
-    }
+    const {todoList, fetchTodos, removeTodo, getTotalTodo, changeTodoCompleted, addTodo} = todoStore;
 
     return <TodoList
-        data={data}
-        actions={actions}
+        data={{
+            todoList,
+            totalCount: getTotalTodo
+        }}
+        actions={{
+            fetchTodos,
+            removeTodo,
+            changeTodoCompleted,
+            addTodo,
+        }}
     />;
 });
 

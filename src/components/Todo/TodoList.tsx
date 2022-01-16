@@ -1,7 +1,6 @@
-import React, {FC, useEffect} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {ITodoItem} from "../../models";
 import {TodoItem} from "./TodoItem";
-import todoStore from "../../store/todo.store";
 
 interface TodoProps {
     data: {
@@ -9,21 +8,33 @@ interface TodoProps {
         totalCount: number
     },
     actions: {
-        fetchTodoList: () => void;
-        removeItem: (id: number) => void;
+        fetchTodos: () => void;
+        removeTodo: (id: number) => void;
         changeTodoCompleted: (id: number) => void;
+        addTodo: (todoItem: ITodoItem) => void;
     }
 }
 
 export const TodoList: FC<TodoProps> = ({data, actions}) => {
     const {todoList, totalCount, } = data;
-    const {fetchTodoList, removeItem, changeTodoCompleted} = actions;
+    const {fetchTodos, removeTodo, changeTodoCompleted, addTodo} = actions;
 
-    const fetch123 = () => fetchTodoList();
-    useEffect(() => {
-        // todoStore.fetchTodos();
-        fetchTodoList();
-        // fetch123()
+    const [todoText, setTodoText] = useState<string>('');
+    //todo сделать абстракцией?
+    const addTodoToList = () => {
+        const newId = todoList[todoList.length-1].id + 1;
+        const newTodo: ITodoItem = {
+            userId: 1,
+            id: newId,
+            title: todoText,
+            completed: false
+        }
+        addTodo(newTodo);
+        setTodoText('')
+    }
+
+    useEffect(()=> {
+        fetchTodos()
     }, [])
 
     return (
@@ -36,7 +47,7 @@ export const TodoList: FC<TodoProps> = ({data, actions}) => {
                 {todoList.map(todoItem =>
                     <TodoItem
                         key={todoItem.id}
-                        remove={removeItem}
+                        remove={removeTodo}
                         changeTodoCompleted={changeTodoCompleted}
                         {...todoItem}
                     />
@@ -44,8 +55,8 @@ export const TodoList: FC<TodoProps> = ({data, actions}) => {
                 </tbody>
             </table>
 
-            <input type="text"/>
-            <button>Добавить</button>
+            <input type="text" value={todoText} onChange={(e)=> setTodoText(e.target.value)}/>
+            <button onClick={addTodoToList}>Добавить</button>
         </div>
     );
 }
