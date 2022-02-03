@@ -35,7 +35,7 @@ export const TodoList: FC<TodoProps> = ({data, actions}) => {
 
     useEffect(()=> {
         fetchTodos()
-    }, [])
+    }, [fetchTodos])
 
     return (
         <div>

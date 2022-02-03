@@ -1,9 +1,11 @@
-import {action, computed, makeAutoObservable, observable} from "mobx";
+import {action, computed, makeObservable, observable} from "mobx";
 import {ITodoItem} from "../models";
+import TodoLogic from "../logic/todo.logic";
+import TodoService from "../services/todo.service";
 
 class Todo {
     constructor() {
-        makeAutoObservable(
+        makeObservable(
             this,
             {
                 todoList: observable, // указываем, что за изменения этого поля нужно следить
@@ -20,35 +22,23 @@ class Todo {
 
 
     addTodo(todo: ITodoItem) {
-        this.todoList.push(todo);
+        this.todoList = TodoLogic.addItem(this.todoList, todo);
     }
 
     removeTodo(id: ITodoItem['id']) {
-        this.todoList = this.todoList.filter(todoItem => todoItem.id !== id);
+        this.todoList = TodoLogic.removeItem(this.todoList, id);
     }
 
     changeTodoCompleted(id: ITodoItem['id']) {
-        this.todoList = this.todoList.map(todoItem => {
-            if(todoItem.id === id) {
-                return {...todoItem, completed: !todoItem.completed}
-            } else return todoItem;
-        })
+        this.todoList = TodoLogic.markItemAsCompleted(this.todoList, id);
     }
 
-    // вычисляемые значения. функция будет вызываться Только тогда, когда задействованные в ней значения будут изменяться. оптимизация
     get getTotalTodo() {
-        return this.todoList.length;
+        return TodoLogic.getTotalTodo(this.todoList);
     }
 
-    // ассинхронщина
-    fetchTodos() {
-        //todo ссылку вынести в константу в другой папке
-        fetch('https://jsonplaceholder.typicode.com/todos')
-            .then(response => response.json())
-            .then(json => {
-                const newTodoList = json.slice(0, 20);
-                this.todoList = newTodoList
-            })
+    async fetchTodos() {
+        this.todoList = await TodoService.fetchTodos();
     }
 
 }
