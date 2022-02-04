@@ -1,7 +1,10 @@
+@import "/src/sharedStyles.scss";
+
 .TodoItemWrapper {
+  @include border;
   position: relative;
-  border: 1px solid black;
   padding: 12px 16px;
+  margin: 16px;
 
   .title {
     font-size: 20px;

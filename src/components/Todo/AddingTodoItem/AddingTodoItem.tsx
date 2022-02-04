@@ -1,5 +1,6 @@
 import React, {FC, useState} from 'react';
 import {ITodoItem} from "../../../models";
+import styles from './AddingTodoItem.module.scss';
 
 interface AddingTodoItemProps {
     todoList: ITodoItem[],
@@ -22,8 +23,13 @@ export const AddingTodoItem: FC<AddingTodoItemProps> = ({todoList, addTodo}) => 
         setTodoText('')
     }
     return (
-        <div>
-            <input type="text" value={todoText} onChange={(e) => setTodoText(e.target.value)}/>
+        <div className={styles.AddingTodoItemWrapper}>
+            <input
+                type="text"
+                placeholder='Текст новой заметки...'
+                value={todoText}
+                onChange={(e) => setTodoText(e.target.value)}
+            />
             <button onClick={addTodoToList}>Добавить</button>
         </div>
     );

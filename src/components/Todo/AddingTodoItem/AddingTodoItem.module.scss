@@ -1,0 +1,10 @@
+@import "/src/sharedStyles.scss";
+
+.AddingTodoItemWrapper {
+  display: flex;
+  justify-content: center;
+
+  input, button {
+    @include border;
+  }
+}
