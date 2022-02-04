@@ -1,0 +1,21 @@
+.TodoItemWrapper {
+  position: relative;
+  border: 1px solid black;
+  padding: 12px 16px;
+
+  .title {
+    font-size: 20px;
+  }
+
+  .remove {
+    position: absolute;
+    top: 1%;
+    right: 2%;
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  .checkbox {
+    cursor: pointer;
+  }
+}

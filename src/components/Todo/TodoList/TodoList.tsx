@@ -1,6 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
-import {ITodoItem} from "../../models";
-import {TodoItem} from "./TodoItem";
+import {ITodoItem} from "../../../models";
+import {TodoItem} from "../TodoItem/TodoItem";
+import styles from './TodoList.module.scss';
 
 interface TodoProps {
     data: {
@@ -16,15 +17,15 @@ interface TodoProps {
 }
 
 export const TodoList: FC<TodoProps> = ({data, actions}) => {
-    const {todoList, totalCount, } = data;
+    const {todoList, totalCount,} = data;
     const {fetchTodos, removeTodo, changeTodoCompleted, addTodo} = actions;
 
     const [todoText, setTodoText] = useState<string>('');
     //todo сделать абстракцией?
     const addTodoToList = () => {
-        const newId = todoList[todoList.length-1].id + 1;
+        const newId = todoList[todoList.length - 1].id + 1;
         const newTodo: ITodoItem = {
-            userId: 1,
+            userId: 1, //todo получать из стора, где будет инфа про пользователя
             id: newId,
             title: todoText,
             completed: false
@@ -33,7 +34,7 @@ export const TodoList: FC<TodoProps> = ({data, actions}) => {
         setTodoText('')
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         fetchTodos()
     }, [fetchTodos])
 
@@ -42,8 +43,9 @@ export const TodoList: FC<TodoProps> = ({data, actions}) => {
             <p>
                 Total count: {totalCount}
             </p>
-            <table>
-                <tbody>
+            <input type="text" value={todoText} onChange={(e) => setTodoText(e.target.value)}/>
+            <button onClick={addTodoToList}>Добавить</button>
+            <div className={styles.todoListWrapper}>
                 {todoList.map(todoItem =>
                     <TodoItem
                         key={todoItem.id}
@@ -52,11 +54,7 @@ export const TodoList: FC<TodoProps> = ({data, actions}) => {
                         {...todoItem}
                     />
                 )}
-                </tbody>
-            </table>
-
-            <input type="text" value={todoText} onChange={(e)=> setTodoText(e.target.value)}/>
-            <button onClick={addTodoToList}>Добавить</button>
+            </div>
         </div>
     );
 }

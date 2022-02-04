@@ -10,7 +10,7 @@ interface ErrorBoundaryState {
     errorMessage: Error,
 }
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
     state: ErrorBoundaryState = {
         isError: false,
         errorMessage: new Error(),
@@ -32,5 +32,3 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
         return <div>{this.props.children}</div>
     }
 }
-
-export default ErrorBoundary;
